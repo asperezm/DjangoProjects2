@@ -23,3 +23,27 @@ def measure(request):
     measures = response.json()
     # Rederiza la respuesta en el template measure
     return render(request, "measure/measure.html", {'measures': measures})
+
+def medicion(request):
+    if 'valor' in request.GET:
+        fecha = request.GET['fecha']
+        origen = request.GET['origen']
+        valor = request.GET['valor']
+        codigos = request.GET['codigos']
+        observacion = request.GET['observacion']
+
+        # Verifica si el value no esta vacio
+        if valor:
+            # Crea el json para realizar la petición POST al Web Service
+            args = {'fecha': fecha, 'origen': origen, 'valor': valor, 'codigos': codigos, 'observacion': observacion}
+            print(args)
+            response = requests.post('http://127.0.0.1:8000/medicion/', args)
+            # Convierte la respuesta en JSON
+            medicion_json = response.json()
+
+    # Realiza una petición GET al Web Services
+    response = requests.get('http://127.0.0.1:8000/medicion/')
+    # Convierte la respuesta en JSON
+    medicion = response.json()
+    # Rederiza la respuesta en el template measure
+    return render(request, "measure/medicion.html", {'medicion': medicion})
